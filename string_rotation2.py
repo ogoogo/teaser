@@ -3,7 +3,7 @@ from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-t_total = 100 # Total time[s]
+t_total = 1000 # Total time[s]
 interval = 1
 dt = 0.1 # 1ステップの時間[s]
 t = np.arange(0, t_total, dt)
@@ -13,7 +13,7 @@ m = 0.1 #単位長さの紐の質量[kg]
 l = 1 # 単位長さの紐の長さ[m]
 dl_dt = 0.1
 
-n = 10
+n = 20
 omega = np.pi / 180 * 5
 radius = 5
 
@@ -51,7 +51,6 @@ def equation(x, t, n, omega, radius, dt, dl_dt, l, m, M):
             if partial_length * partial_mass == 0:
                 continue
             ret[n + i] = calc_theta_dot2(partial_mass, partial_length, x[n * 3], i, n, x[0:n])
-            print(ret[n + i])
             ret[n * 2 + i] = dl_dt
             ret[n * 3] += M * partial_length * ret[n + i] * np.sin(x[i] - x[0])
         else:
@@ -66,8 +65,8 @@ x = odeint(equation,x0,t,args=(n, omega, radius, dt, dl_dt, l, m, M))
 
 fig,ax = plt.subplots()
 image, = ax.plot([],[], 'o-', lw=1)
-ax.set_xlim(-1.5 * n,1.5 * n)
-ax.set_ylim(-1.5 * n,1.5 * n)
+ax.set_xlim(- 2 - radius - n, 2 + radius + n)
+ax.set_ylim(-2 - radius - n, 2 + radius + n)
 # ax.set_title('t={}'.format(t))
 theta = np.arange(0,2*np.pi, 2*np.pi/360)
 circle_x = radius * np.cos(theta)
